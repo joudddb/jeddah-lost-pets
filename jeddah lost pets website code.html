@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jeddah Lost &amp; Found Pets</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #e0f2fe, #fef3c7);
+      color: #0f172a;
+      padding: 24px 16px 32px;
+      min-height: 100vh;
+    }
+
+    h1, h2 {
+      font-weight: 700;
+    }
+
+    .header-wrap {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      display: inline-block;
+      padding: 10px 26px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #2563eb, #f97316);
+      color: #ffffff;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.35);
+      font-size: 1.5rem;
+      letter-spacing: 0.03em;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      font-size: 0.98rem;
+      color: #1f2937;
+      background: rgba(255, 255, 255, 0.7);
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.5fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 840px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 18px 18px 20px;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.22);
+      border-top: 4px solid #2563eb;
+      border-left: 1px solid rgba(148, 163, 184, 0.4);
+      border-right: 1px solid rgba(148, 163, 184, 0.4);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.5);
+      backdrop-filter: blur(6px);
+    }
+
+    .card:nth-of-type(2) {
+      border-top-color: #22c55e;
+    }
+
+    .card h2 {
+      margin-bottom: 10px;
+      font-size: 1.15rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card h2::before {
+      content: "🐾";
+      font-size: 1.2rem;
+    }
+
+    .section-description {
+      font-size: 0.86rem;
+      color: #4b5563;
+      margin-bottom: 14px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: block;
+      color: #111827;
+    }
+
+    .label-hint {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #6b7280;
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #cbd5f5;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      background: #eff6ff;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      font-size: 0.82rem;
+    }
+
+    input[type="text"]:focus,
+    input[type="tel"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.5);
+      background: #ffffff;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+      max-height: 200px;
+    }
+
+    .inline-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      margin-bottom: 4px;
+    }
+
+    .inline-options label {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e5f0ff;
+      border: 1px solid transparent;
+      transition: background 0.15s, border 0.15s;
+    }
+
+    .inline-options input[type="radio"] {
+      accent-color: #2563eb;
+    }
+
+    .inline-options label:hover {
+      background: #dbeafe;
+      border-color: #bfdbfe;
+    }
+
+    .btn-primary {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #2563eb, #f97316);
+      color: #ffffff;
+      margin-top: 4px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.4);
+      align-self: flex-start;
+      letter-spacing: 0.03em;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(37, 99, 235, 0.55);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn-small {
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      background: #ef4444;
+      color: #ffffff;
+      transition: background 0.12s ease, transform 0.05s ease, box-shadow 0.08s ease;
+      box-shadow: 0 8px 16px rgba(239, 68, 68, 0.45);
+    }
+
+    .btn-small:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+
+    .btn-small:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 13px rgba(239, 68, 68, 0.45);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 8px 0 14px;
+      align-items: center;
+    }
+
+    .filters > div {
+      background: #eff6ff;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #bfdbfe;
+    }
+
+    .filters select,
+    .filters input[type="text"] {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: none;
+      outline: none;
+      background: transparent;
+    }
+
+    .filters label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1d4ed8;
+      margin-bottom: 2px;
+    }
+
+    .counter {
+      font-size: 0.8rem;
+      color: #4b5563;
+      margin-bottom: 6px;
+    }
+
+    .reports-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .report-card {
+      border-radius: 14px;
+      border: 1px solid #cbd5e1;
+      background: linear-gradient(145deg, #ffffff, #f9fafb);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 270px;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.14);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .report-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.2);
+    }
+
+    .report-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      background: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .report-body {
+      padding: 10px 11px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.85rem;
+      flex: 1;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+    }
+
+    .badge-lost {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
+    .badge-found {
+      background: #dcfce7;
+      color: #15803d;
+      border-color: #bbf7d0;
+    }
+
+    .badge-cat {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+
+    .badge-dog {
+      background: #fef9c3;
+      color: #92400e;
+      border-color: #facc15;
+    }
+
+    .report-title {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .report-text {
+      margin-top: 2px;
+      color: #4b5563;
+      line-height: 1.35;
+    }
+
+    .report-meta {
+      margin-top: 4px;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .report-meta strong {
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .report-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 6px;
+      border-top: 1px dashed #e5e7eb;
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    .no-results {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 6px;
+      background: #fef3c7;
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px dashed #facc15;
+    }
+
+    /* IMAGE MODAL */
+
+    .image-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .image-modal-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-modal-img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 12px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+      background: #000;
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      border: none;
+      border-radius: 999px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      background: #f9fafb;
+      color: #111827;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.55);
+    }
+
+    .image-modal-close:hover {
+      background: #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="header-wrap">
+    <h1>Jeddah Lost &amp; Found Pets</h1>
+    <p class="subtitle">Report lost or found cats and dogs in Jeddah, and help reunite pets with their families.</p>
+  </div>
+
+  <div class="container">
+    <!-- ADD REPORT SECTION -->
+    <section class="card">
+      <h2>Add Pet Report</h2>
+      <p class="section-description">
+        Fill in the details below. Your report is stored in an online database (not only on this device).
+      </p>
+
+      <form id="reportForm">
+        <!-- Report Type -->
+        <div>
+          <label>Report Type <span class="label-hint">(required)</span></label>
+          <div class="inline-options">
+            <label>
+              <input type="radio" name="reportType" value="lost" required />
+              <span>Lost</span>
+            </label>
+            <label>
+              <input type="radio" name="reportType" value="found" />
+              <span>Found</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Pet Type -->
+        <div>
+          <label>Pet Type <span class="label-hint">(required)</span></label>
+          <div class="inline-options">
+            <label>
+              <input type="radio" name="petType" value="cat" required />
+              <span>Cat</span>
+            </label>
+            <label>
+              <input type="radio" name="petType" value="dog" />
+              <span>Dog</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Pet Name -->
+        <div>
+          <label for="petName">Pet Name <span class="label-hint">(optional)</span></label>
+          <input type="text" id="petName" placeholder="e.g. Lulu" />
+        </div>
+
+        <!-- Area -->
+        <div>
+          <label for="area">Area in Jeddah <span class="label-hint">(required)</span></label>
+          <input type="text" id="area" required placeholder="e.g. Al Rawdah, Al Salamah" />
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <label for="contact">Contact Number <span class="label-hint">(required)</span></label>
+          <input type="tel" id="contact" required placeholder="e.g. 05xxxxxxxx" />
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label for="description">Description <span class="label-hint">(required)</span></label>
+          <textarea id="description" required placeholder="Color, size, collar, special marks, time lost/found, etc."></textarea>
+        </div>
+
+        <!-- Photo -->
+        <div>
+          <label for="photo">Photo of Pet <span class="label-hint">(required)</span></label>
+          <input type="file" id="photo" accept="image/*" required />
+          <p class="hint">Tip: After saving, click the picture in the card to see it bigger.</p>
+        </div>
+
+        <button type="submit" class="btn-primary">Save Report</button>
+      </form>
+    </section>
+
+    <!-- BROWSE SECTION -->
+    <section class="card">
+      <h2>Browse Reports</h2>
+      <p class="section-description">
+        Filter by status, pet type, or area to quickly find relevant reports.
+      </p>
+
+      <div class="filters">
+        <div>
+          <label for="statusFilter">Status</label><br />
+          <select id="statusFilter">
+            <option value="all">All</option>
+            <option value="lost">Lost</option>
+            <option value="found">Found</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="petTypeFilter">Pet Type</label><br />
+          <select id="petTypeFilter">
+            <option value="all">All</option>
+            <option value="cat">Cats</option>
+            <option value="dog">Dogs</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="areaFilter">Area (search)</label><br />
+          <input type="text" id="areaFilter" placeholder="e.g. Rawdah" />
+        </div>
+      </div>
+
+      <div class="counter" id="reportCounter">0 reports shown.</div>
+
+      <div id="reportsList" class="reports-list"></div>
+      <div id="noResults" class="no-results" style="display: none;">
+        No reports match your filters.
+      </div>
+    </section>
+  </div>
+
+  <!-- IMAGE MODAL -->
+  <div id="imageModal" class="image-modal-overlay">
+    <div class="image-modal-content">
+      <button class="image-modal-close" aria-label="Close image">&times;</button>
+      <img id="imageModalImg" class="image-modal-img" alt="Full-size pet image" />
+    </div>
+  </div>
+
+  <!-- MAIN SCRIPT WITH FIREBASE (DATABASE) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      push,
+      onValue,
+      remove
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+    // Your Firebase configuration (filled with your values)
+    const firebaseConfig = {
+      apiKey: "AIzaSyB83SVj1NvAKbGrESNtsIdFbjK_VISqvck",
+      authDomain: "jeddah-lost-pets.firebaseapp.com",
+      databaseURL: "https://jeddah-lost-pets-default-rtdb.firebaseio.com",
+      projectId: "jeddah-lost-pets",
+      storageBucket: "jeddah-lost-pets.firebasestorage.app",
+      messagingSenderId: "515328978388",
+      appId: "1:515328978388:web:f939a069013141c1bd7a41",
+      measurementId: "G-80LH0L4CND"
+    };
+
+    // Initialize Firebase + Realtime Database
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const reportsRef = ref(db, "reports");
+
+    // DOM elements
+    const form = document.getElementById("reportForm");
+    const reportsList = document.getElementById("reportsList");
+    const reportCounter = document.getElementById("reportCounter");
+    const noResults = document.getElementById("noResults");
+
+    const statusFilter = document.getElementById("statusFilter");
+    const petTypeFilter = document.getElementById("petTypeFilter");
+    const areaFilter = document.getElementById("areaFilter");
+
+    const imageModal = document.getElementById("imageModal");
+    const imageModalImg = document.getElementById("imageModalImg");
+    const imageModalClose = document.querySelector(".image-modal-close");
+
+    // Local cache of reports from the database
+    let reports = [];
+
+    function escapeHtml(str) {
+      if (typeof str !== "string") return "";
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // IMAGE MODAL
+    function openImageModal(src) {
+      if (!src) return;
+      imageModalImg.src = src;
+      imageModal.style.display = "flex";
+    }
+
+    function closeImageModal() {
+      imageModal.style.display = "none";
+      imageModalImg.src = "";
+    }
+
+    imageModalClose.addEventListener("click", closeImageModal);
+    imageModal.addEventListener("click", (e) => {
+      if (e.target === imageModal) closeImageModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && imageModal.style.display === "flex") {
+        closeImageModal();
+      }
+    });
+
+    // RENDER
+    function renderReports(list) {
+      reportsList.innerHTML = "";
+
+      if (!list || list.length === 0) {
+        noResults.style.display = "block";
+      } else {
+        noResults.style.display = "none";
+      }
+
+      reportCounter.textContent =
+        (list ? list.length : 0) +
+        (list && list.length === 1 ? " report" : " reports") +
+        " shown.";
+
+      if (!list) return;
+
+      list.forEach((report) => {
+        const card = document.createElement("article");
+        card.className = "report-card";
+
+        const img = document.createElement("img");
+        img.className = "report-image";
+        img.src = report.imageDataUrl || "";
+        img.alt = "Pet photo (click to view larger)";
+        img.title = "Click to view larger";
+        img.addEventListener("click", () => openImageModal(report.imageDataUrl));
+        card.appendChild(img);
+
+        const body = document.createElement("div");
+        body.className = "report-body";
+
+        const badgeRow = document.createElement("div");
+        badgeRow.className = "badge-row";
+
+        const statusBadge = document.createElement("span");
+        statusBadge.className =
+          "badge " + (report.reportType === "lost" ? "badge-lost" : "badge-found");
+        statusBadge.textContent =
+          report.reportType === "lost" ? "Lost" : "Found";
+
+        const petBadge = document.createElement("span");
+        petBadge.className =
+          "badge " + (report.petType === "cat" ? "badge-cat" : "badge-dog");
+        petBadge.textContent = report.petType === "cat" ? "Cat" : "Dog";
+
+        badgeRow.appendChild(statusBadge);
+        badgeRow.appendChild(petBadge);
+
+        const title = document.createElement("div");
+        title.className = "report-title";
+        title.textContent = report.petName
+          ? report.petName
+          : (report.petType === "cat" ? "Cat" : "Dog");
+
+        const description = document.createElement("p");
+        description.className = "report-text";
+        description.textContent = report.description;
+
+        const meta = document.createElement("div");
+        meta.className = "report-meta";
+        meta.innerHTML =
+          "<strong>Area:</strong> " +
+          escapeHtml(report.area) +
+          "<br /><strong>Contact:</strong> " +
+          escapeHtml(report.contact);
+
+        const footer = document.createElement("div");
+        footer.className = "report-footer";
+
+        const dateSpan = document.createElement("span");
+        const dt = new Date(report.createdAt);
+        dateSpan.textContent =
+          "Added: " + dt.toLocaleString(undefined, {
+            day: "2-digit",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "btn-small";
+        deleteBtn.textContent = "Delete";
+        deleteBtn.addEventListener("click", () => {
+          const ok = confirm("Delete this report?");
+          if (!ok) return;
+          const reportRef = ref(db, "reports/" + report.id);
+          remove(reportRef).catch((err) => {
+            alert("Error deleting: " + err.message);
+          });
+        });
+
+        footer.appendChild(dateSpan);
+        footer.appendChild(deleteBtn);
+
+        body.appendChild(badgeRow);
+        body.appendChild(title);
+        body.appendChild(description);
+        body.appendChild(meta);
+        body.appendChild(footer);
+
+        card.appendChild(body);
+        reportsList.appendChild(card);
+      });
+    }
+
+    // FILTERING
+    function applyFilters() {
+      const statusVal = statusFilter.value;
+      const petTypeVal = petTypeFilter.value;
+      const areaVal = areaFilter.value.trim().toLowerCase();
+
+      const filtered = reports.filter((r) => {
+        if (statusVal !== "all" && r.reportType !== statusVal) return false;
+        if (petTypeVal !== "all" && r.petType !== petTypeVal) return false;
+        if (areaVal && !r.area.toLowerCase().includes(areaVal)) return false;
+        return true;
+      });
+
+      renderReports(filtered);
+    }
+
+    statusFilter.addEventListener("change", applyFilters);
+    petTypeFilter.addEventListener("change", applyFilters);
+    areaFilter.addEventListener("input", applyFilters);
+
+    // FORM SUBMIT – save to ONLINE DATABASE
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const reportType = form.querySelector('input[name="reportType"]:checked');
+      const petType = form.querySelector('input[name="petType"]:checked');
+      const petName = document.getElementById("petName").value.trim();
+      const area = document.getElementById("area").value.trim();
+      const contact = document.getElementById("contact").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const photoInput = document.getElementById("photo");
+      const photoFile = photoInput.files[0];
+
+      if (!reportType || !petType || !area || !contact || !description) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      if (!photoFile) {
+        alert("Please select a photo of the pet.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const imageDataUrl = event.target.result;
+
+        const newReport = {
+          reportType: reportType.value,
+          petType: petType.value,
+          petName,
+          area,
+          contact,
+          description,
+          imageDataUrl,
+          createdAt: new Date().toISOString()
+        };
+
+        push(reportsRef, newReport)
+          .then(() => {
+            form.reset();
+            alert("Report saved in the online database.");
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("Error saving report: " + err.message);
+          });
+      };
+
+      reader.onerror = () => {
+        alert("Could not read the image. Please try another photo.");
+      };
+
+      reader.readAsDataURL(photoFile);
+    });
+
+    // LISTEN TO DATABASE CHANGES (Realtime)
+    onValue(reportsRef, (snapshot) => {
+      const data = snapshot.val() || {};
+      reports = Object.entries(data).map(([id, value]) => ({
+        id,
+        ...value
+      }));
+      reports.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+      applyFilters();
+    });
+  </script>
+</body>
+</html>
