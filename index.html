@@ -601,7 +601,7 @@
       remove
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
-    // Firebase configuration (filled with values)
+    // Your Firebase configuration (filled with your values)
     const firebaseConfig = {
       apiKey: "AIzaSyB83SVj1NvAKbGrESNtsIdFbjK_VISqvck",
       authDomain: "jeddah-lost-pets.firebaseapp.com",
@@ -634,6 +634,16 @@
 
     // Local cache of reports from the database
     let reports = [];
+
+    // Simple owner ID for this browser, saved in localStorage
+    let ownerId = localStorage.getItem("ownerId");
+    if (!ownerId) {
+      ownerId =
+        "user-" +
+        Math.random().toString(36).slice(2) +
+        Date.now().toString(36);
+      localStorage.setItem("ownerId", ownerId);
+    }
 
     function escapeHtml(str) {
       if (typeof str !== "string") return "";
@@ -747,20 +757,23 @@
             minute: "2-digit"
           });
 
-        const deleteBtn = document.createElement("button");
-        deleteBtn.className = "btn-small";
-        deleteBtn.textContent = "Delete";
-        deleteBtn.addEventListener("click", () => {
-          const ok = confirm("Delete this report?");
-          if (!ok) return;
-          const reportRef = ref(db, "reports/" + report.id);
-          remove(reportRef).catch((err) => {
-            alert("Error deleting: " + err.message);
-          });
-        });
-
         footer.appendChild(dateSpan);
-        footer.appendChild(deleteBtn);
+
+        // Only show Delete button if this browser created the report
+        if (report.ownerId === ownerId) {
+          const deleteBtn = document.createElement("button");
+          deleteBtn.className = "btn-small";
+          deleteBtn.textContent = "Delete";
+          deleteBtn.addEventListener("click", () => {
+            const ok = confirm("Delete this report?");
+            if (!ok) return;
+            const reportRef = ref(db, "reports/" + report.id);
+            remove(reportRef).catch((err) => {
+              alert("Error deleting: " + err.message);
+            });
+          });
+          footer.appendChild(deleteBtn);
+        }
 
         body.appendChild(badgeRow);
         body.appendChild(title);
@@ -828,7 +841,8 @@
           contact,
           description,
           imageDataUrl,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          ownerId // this browser's ID
         };
 
         push(reportsRef, newReport)
