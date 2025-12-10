@@ -235,6 +235,30 @@
       box-shadow: 0 6px 13px rgba(239, 68, 68, 0.45);
     }
 
+    .btn-resolve {
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      background: #16a34a;
+      color: #ffffff;
+      transition: background 0.12s ease, transform 0.05s ease, box-shadow 0.08s ease;
+      box-shadow: 0 8px 16px rgba(22, 163, 74, 0.45);
+      margin-right: 6px;
+    }
+
+    .btn-resolve:hover {
+      background: #15803d;
+      transform: translateY(-1px);
+    }
+
+    .btn-resolve:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 13px rgba(22, 163, 74, 0.45);
+    }
+
     .filters {
       display: flex;
       flex-wrap: wrap;
@@ -354,6 +378,12 @@
       background: #fef9c3;
       color: #92400e;
       border-color: #facc15;
+    }
+
+    .badge-resolved {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #bbf7d0;
     }
 
     .report-title {
@@ -598,7 +628,8 @@
       ref,
       push,
       onValue,
-      remove
+      remove,
+      update
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
     // Your Firebase configuration (filled with your values)
@@ -726,6 +757,14 @@
         badgeRow.appendChild(statusBadge);
         badgeRow.appendChild(petBadge);
 
+        const isResolved = !!report.resolved;
+        if (isResolved) {
+          const resolvedBadge = document.createElement("span");
+          resolvedBadge.className = "badge badge-resolved";
+          resolvedBadge.textContent = "Resolved";
+          badgeRow.appendChild(resolvedBadge);
+        }
+
         const title = document.createElement("div");
         title.className = "report-title";
         title.textContent = report.petName
@@ -759,8 +798,27 @@
 
         footer.appendChild(dateSpan);
 
-        // Only show Delete button if this browser created the report
-        if (report.ownerId === ownerId) {
+        // Only show buttons if this browser created the report AND the report has an ownerId
+        if (report.ownerId && report.ownerId === ownerId) {
+          const buttonsContainer = document.createElement("div");
+
+          // RESOLVE button (only if not already resolved)
+          if (!isResolved) {
+            const resolveBtn = document.createElement("button");
+            resolveBtn.className = "btn-resolve";
+            resolveBtn.textContent = "Mark Resolved";
+            resolveBtn.addEventListener("click", () => {
+              const ok = confirm("Mark this report as resolved?");
+              if (!ok) return;
+              const reportRef = ref(db, "reports/" + report.id);
+              update(reportRef, { resolved: true }).catch((err) => {
+                alert("Error updating: " + err.message);
+              });
+            });
+            buttonsContainer.appendChild(resolveBtn);
+          }
+
+          // DELETE button
           const deleteBtn = document.createElement("button");
           deleteBtn.className = "btn-small";
           deleteBtn.textContent = "Delete";
@@ -772,7 +830,9 @@
               alert("Error deleting: " + err.message);
             });
           });
-          footer.appendChild(deleteBtn);
+          buttonsContainer.appendChild(deleteBtn);
+
+          footer.appendChild(buttonsContainer);
         }
 
         body.appendChild(badgeRow);
@@ -842,6 +902,7 @@
           description,
           imageDataUrl,
           createdAt: new Date().toISOString(),
+          resolved: false,
           ownerId // this browser's ID
         };
 
