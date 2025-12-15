@@ -800,7 +800,7 @@
         footer.appendChild(dateSpan);
 
         // Only show buttons if this browser created the report AND the report has an ownerId
-        //if (report.ownerId && report.ownerId === ownerId) {
+        if (report.ownerId && report.ownerId === ownerId) {
           const buttonsContainer = document.createElement("div");
 
           // RESOLVE button (only if not already resolved)
